@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import edu.westga.comp4420.grocery_list.model.GroceryItem;
 import javafx.scene.control.Label;
 import java.util.List;
@@ -20,7 +18,7 @@ public class UpdateItemWindow {
     @FXML private AnchorPane guiPane;
 
     private GroceryItem selectedItem;
-    private List<GroceryItem> groceryList;
+    private List<GroceryItem> groceryItems;
 	private MainWindow mainWindow;	
 
 	private void closeWindow() {
@@ -38,28 +36,20 @@ public class UpdateItemWindow {
 
     @FXML
     void updateItem(ActionEvent event) {
-        try {
-            // Create an updated item
-            GroceryItem updatedItem = new GroceryItem(
-                this.selectedItem.getName(),
-                Integer.parseInt(this.newAmountNeeded.getText()),
-                Integer.parseInt(this.newAmountInCart.getText())
-            );
 
-            // Remove the old item and add the updated one
-            this.groceryList.remove(this.selectedItem);
-            this.groceryList.add(updatedItem);
-			
-			this.closeWindow();
-        } catch (NumberFormatException error) {
-            Alert errorBox = new Alert(AlertType.ERROR);
-            errorBox.setContentText("Must provide valid numeric values for amounts.");
-            errorBox.showAndWait();
-        } catch (IllegalArgumentException error) {
-            Alert errorBox = new Alert(AlertType.ERROR);
-            errorBox.setContentText(error.getMessage());
-            errorBox.showAndWait();
-        }
+		// Create an updated item
+		GroceryItem updatedItem = new GroceryItem(
+			this.selectedItem.getName(),
+			Integer.parseInt(this.newAmountNeeded.getText()),
+			Integer.parseInt(this.newAmountInCart.getText())
+		);
+
+		// Remove the old item and add the updated one
+		this.groceryItems.remove(this.selectedItem);
+		this.groceryItems.add(updatedItem);
+		
+		this.closeWindow();
+  
     }
 
     @FXML
@@ -67,9 +57,9 @@ public class UpdateItemWindow {
         this.guiPane.getScene().getWindow().hide();
     }
 
-    public void setGroceryList(List<GroceryItem> groceryList) {
-        this.groceryList = groceryList;
-    }
+	public void setItemList(List<GroceryItem> groceryItems) {
+		this.groceryItems = groceryItems;
+	}
 
     @FXML
     void initialize() {

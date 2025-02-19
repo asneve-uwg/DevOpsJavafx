@@ -5,12 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
 import edu.westga.comp4420.grocery_list.model.GroceryItem;
-import javafx.scene.control.Label;
 import java.util.List;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
+
 
 public class UpdateItemWindow {   
     @FXML
-    private Label currentInfo;
+    private ListView currentInfo;
     @FXML
     private TextField newAmountNeeded;
     @FXML
@@ -24,33 +27,35 @@ public class UpdateItemWindow {
 	private void closeWindow() {
 		this.guiPane.getScene().getWindow().hide();
 	}
+
+
 	
-    public void setSelectedItem(GroceryItem item) {
-        if (item != null) {
-            this.selectedItem = item;
-            this.currentInfo.setText(item.getName());
-            this.newAmountNeeded.setText(String.valueOf(item.getAmountNeeded()));
-            this.newAmountInCart.setText(String.valueOf(item.getAmountInCart()));
-        }
-    }
 
-    @FXML
-    void updateItem(ActionEvent event) {
+	@FXML
+	void updateItem(ActionEvent event) {
+		System.out.println(this.selectedItem);
+		try {
+			// Create an updated item
+			GroceryItem updatedItem = new GroceryItem(this.selectedItem.getName(), Integer.parseInt(this.newAmountInCart.getText()), Integer.parseInt(this.newAmountNeeded.getText()));
 
-		// Create an updated item
-		GroceryItem updatedItem = new GroceryItem(
-			this.selectedItem.getName(),
-			Integer.parseInt(this.newAmountNeeded.getText()),
-			Integer.parseInt(this.newAmountInCart.getText())
-		);
-
-		// Remove the old item and add the updated one
-		this.groceryItems.remove(this.selectedItem);
-		this.groceryItems.add(updatedItem);
-		
-		this.closeWindow();
+			// Remove the old item and add the updated one
+			this.groceryItems.remove(this.selectedItem);
+			this.groceryItems.add(updatedItem);
+			
+			this.closeWindow();
   
+		} catch (NumberFormatException error) {
+			Alert errorBox = new Alert(AlertType.ERROR);
+			errorBox.setContentText("Must provide value number for amount needed.");
+			errorBox.showAndWait();
+		} catch (IllegalArgumentException error) {
+			Alert errorBox = new Alert(AlertType.ERROR);
+			errorBox.setContentText(error.getMessage());
+			errorBox.showAndWait();
+		}
+
     }
+
 
     @FXML
     void cancel(ActionEvent event) {
@@ -60,7 +65,19 @@ public class UpdateItemWindow {
 	public void setItemList(List<GroceryItem> groceryItems) {
 		this.groceryItems = groceryItems;
 	}
+	
+	public void setSelectedItem(GroceryItem item) {
+    // Ensure the item is not null
+		if (item != null) {
+			// Set the selected item
+			this.selectedItem = item;
+			
+			// Set the name of the item in the label
+			this.currentInfo.getItems().clear();
+			this.currentInfo.getItems().add(item.toString());
 
+		}
+	}
     @FXML
     void initialize() {
         assert this.currentInfo != null : "fx:id=\"currentInfo\" was not injected: check your FXML file 'UpdateItemWindow.fxml'.";

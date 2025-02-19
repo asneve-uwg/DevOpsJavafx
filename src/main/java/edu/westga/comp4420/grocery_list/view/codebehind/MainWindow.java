@@ -49,23 +49,23 @@ public class MainWindow {
     @FXML
     void updateItem(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource(Main.UPDATE_ITEM_WINDOW_RESOURCE));
-            loader.load();
-            Parent parent = loader.getRoot();
-            Scene scene = new Scene(parent);
-            Stage addItemStage = new Stage();
-            addItemStage.setTitle(Main.WINDOW_TITLE);
-            addItemStage.setScene(scene);
-            addItemStage.initModality(Modality.APPLICATION_MODAL);
-
-            UpdateItemWindow controller = (UpdateItemWindow) loader.getController();
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource(Main.UPDATE_ITEM_WINDOW_RESOURCE));
+			loader.load();
+			Parent parent = loader.getRoot();
+			Scene scene = new Scene(parent);
+			Stage updateItemStage = new Stage();
+			updateItemStage.setTitle(Main.WINDOW_TITLE);
+			updateItemStage.setScene(scene);
+			updateItemStage.initModality(Modality.APPLICATION_MODAL);
+			UpdateItemWindow controller = (UpdateItemWindow) loader.getController();
 			controller.setItemList(this.groceryItems.getItems());
-
-
-            addItemStage.showAndWait();
+			controller.setSelectedItem(this.groceryItems.getSelectionModel().getSelectedItem());
+			updateItemStage.showAndWait();
+			
 			
         } catch (IOException error) {
+			GroceryItem selectedItem = this.groceryItems.getSelectionModel().getSelectedItem();
             Alert errorBox = new Alert(AlertType.ERROR);
             errorBox.setContentText("Unable to open update window");
             errorBox.showAndWait();

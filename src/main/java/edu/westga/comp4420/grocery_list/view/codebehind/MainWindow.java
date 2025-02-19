@@ -60,6 +60,31 @@ public class MainWindow {
 	}
 	
 	@FXML
+    void updateItem(ActionEvent event) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource(Main.ADD_ITEM_WINDOW_RESOURCE));
+			loader.load();
+			Parent parent = loader.getRoot();
+			Scene scene = new Scene(parent);
+			Stage addItemStage = new Stage();
+			addItemStage.setTitle(Main.WINDOW_TITLE);
+			addItemStage.setScene(scene);
+			addItemStage.initModality(Modality.APPLICATION_MODAL);
+
+			AddItemWindow controller = (AddItemWindow) loader.getController();
+			controller.setItemList(this.groceryItems.getItems());
+
+			addItemStage.showAndWait();
+		} catch (IOException error) {
+			Alert errorBox = new Alert(AlertType.ERROR);
+			errorBox.setContentText("Unable to open add window");
+			errorBox.showAndWait();
+		}
+
+    }
+	
+	@FXML
 	void initialize() {
 		assert this.groceryItems != null : "fx:id=\"groceryItems\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.guiPane != null : "fx:id=\"guiPane\" was not injected: check your FXML file 'MainWindow.fxml'.";

@@ -61,9 +61,10 @@ public class MainWindow {
 	
 	@FXML
     void updateItem(ActionEvent event) {
+
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource(Main.ADD_ITEM_WINDOW_RESOURCE));
+			loader.setLocation(Main.class.getResource(Main.UPDATE_ITEM_WINDOW_RESOURCE));
 			loader.load();
 			Parent parent = loader.getRoot();
 			Scene scene = new Scene(parent);
@@ -72,7 +73,7 @@ public class MainWindow {
 			addItemStage.setScene(scene);
 			addItemStage.initModality(Modality.APPLICATION_MODAL);
 
-			AddItemWindow controller = (AddItemWindow) loader.getController();
+			UpdateItemWindow controller = (UpdateItemWindow) loader.getController();
 			controller.setItemList(this.groceryItems.getItems());
 
 			addItemStage.showAndWait();

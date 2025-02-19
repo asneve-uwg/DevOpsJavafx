@@ -1,67 +1,81 @@
 package edu.westga.comp4420.grocery_list.view.codebehind;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
+import edu.westga.comp4420.grocery_list.model.GroceryItem;
+import javafx.scene.control.Label;
 import java.util.List;
 
-import edu.westga.comp4420.grocery_list.model.GroceryItem;
-
-/**
- * CodeBehind To Handle Processing for the AddItemWindow
- *
- * @author	Comp 4420
- * @version Spring 2025
- */
 public class UpdateItemWindow {   
-	@FXML private AnchorPane guiPane;
-	@FXML private TextField amountNeeded;
-    @FXML private TextField name;
-	
-	private List<GroceryItem> groceryItems;
-	
+    @FXML
+    private Label currentInfo;
+    @FXML
+    private TextField newAmountNeeded;
+    @FXML
+    private TextField newAmountInCart;
+    @FXML private AnchorPane guiPane;
+
+    private GroceryItem selectedItem;
+    private List<GroceryItem> groceryList;
+	private MainWindow mainWindow;	
+
 	private void closeWindow() {
 		this.guiPane.getScene().getWindow().hide();
 	}
+	
+    public void setSelectedItem(GroceryItem item) {
+        if (item != null) {
+            this.selectedItem = item;
+            this.currentInfo.setText(item.getName());
+            this.newAmountNeeded.setText(String.valueOf(item.getAmountNeeded()));
+            this.newAmountInCart.setText(String.valueOf(item.getAmountInCart()));
+        }
+    }
 
     @FXML
-    void addItem(ActionEvent event) {
-		try {
-			String name = this.name.getText();
-			int amountNeeded = Integer.parseInt(this.amountNeeded.getText());
-			GroceryItem item = new GroceryItem(name, amountNeeded, 0);
-			this.groceryItems.add(item);
-			this.closeWindow();
-		} catch (NumberFormatException error) {
-			Alert errorBox = new Alert(AlertType.ERROR);
-			errorBox.setContentText("Must provide value number for amount needed.");
-			errorBox.showAndWait();
-		} catch (IllegalArgumentException error) {
-			Alert errorBox = new Alert(AlertType.ERROR);
-			errorBox.setContentText(error.getMessage());
-			errorBox.showAndWait();
-		}
+    void updateItem(ActionEvent event) {
+        try {
+            // Create an updated item
+            GroceryItem updatedItem = new GroceryItem(
+                this.selectedItem.getName(),
+                Integer.parseInt(this.newAmountNeeded.getText()),
+                Integer.parseInt(this.newAmountInCart.getText())
+            );
 
+            // Remove the old item and add the updated one
+            this.groceryList.remove(this.selectedItem);
+            this.groceryList.add(updatedItem);
+			
+			this.closeWindow();
+        } catch (NumberFormatException error) {
+            Alert errorBox = new Alert(AlertType.ERROR);
+            errorBox.setContentText("Must provide valid numeric values for amounts.");
+            errorBox.showAndWait();
+        } catch (IllegalArgumentException error) {
+            Alert errorBox = new Alert(AlertType.ERROR);
+            errorBox.setContentText(error.getMessage());
+            errorBox.showAndWait();
+        }
     }
 
     @FXML
     void cancel(ActionEvent event) {
-		this.closeWindow();
+        this.guiPane.getScene().getWindow().hide();
     }
-	
-	
-	public void setItemList(List<GroceryItem> groceryItems) {
-		this.groceryItems = groceryItems;
-	}
-	
-	@FXML
-	void initialize() {
-		assert this.amountNeeded != null : "fx:id=\"amountNeeded\" was not injected: check your FXML file 'AddItemWindow.fxml'.";
-        assert this.guiPane != null : "fx:id=\"guiPane\" was not injected: check your FXML file 'AddItemWindow.fxml'.";
-        assert this.name != null : "fx:id=\"name\" was not injected: check your FXML file 'AddItemWindow.fxml'.";
-	}
+
+    public void setGroceryList(List<GroceryItem> groceryList) {
+        this.groceryList = groceryList;
+    }
+
+    @FXML
+    void initialize() {
+        assert this.currentInfo != null : "fx:id=\"currentInfo\" was not injected: check your FXML file 'UpdateItemWindow.fxml'.";
+        assert this.guiPane != null : "fx:id=\"guiPane\" was not injected: check your FXML file 'UpdateItemWindow.fxml'.";
+        assert this.newAmountInCart != null : "fx:id=\"newAmountInCart\" was not injected: check your FXML file 'UpdateItemWindow.fxml'.";
+        assert this.newAmountNeeded != null : "fx:id=\"newAmountNeeded\" was not injected: check your FXML file 'UpdateItemWindow.fxml'.";
+    }
 }

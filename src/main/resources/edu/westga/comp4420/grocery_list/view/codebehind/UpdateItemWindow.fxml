@@ -16,7 +16,7 @@
          </font>
       </Label>
       <Button layoutX="45.0" layoutY="316.0" mnemonicParsing="false" text="update" />
-      <Button layoutX="190.0" layoutY="316.0" mnemonicParsing="false" text="cancel" />
+      <Button layoutX="190.0" layoutY="316.0" mnemonicParsing="false" onAction="#cancel" text="cancel" />
       <TextArea fx:id="currentInfo" layoutX="36.0" layoutY="68.0" prefHeight="97.0" prefWidth="200.0" />
       <Text layoutX="38.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount in Cart:" />
       <Text layoutX="36.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Desired Amount:" />
